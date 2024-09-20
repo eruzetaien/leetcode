@@ -1,25 +1,25 @@
-import heapq
 class Solution:
     def minimumSteps(self, s: str) -> int:
-        black_indices = [] #1, min heap
-        white_indices = [] #0, max heap
+        black_indices = [] 
+        white_indices = [] 
 
         for index, char in enumerate(s):
             if char == '1':
-                black_indices.append(index)
+                black_indices.append(int(index))
             elif char == '0':
-                white_indices.append(-int(index))
+                white_indices.append(int(index))
 
-        heapq.heapify(white_indices)
-        heapq.heapify(black_indices)
+        white_pointer = len(white_indices) - 1
+        black_pointer = 0
 
-        swap_counter = 0
-        while ( white_indices and black_indices and (-white_indices[0] > black_indices[0])):
-            white_index = -heapq.heappop(white_indices)
-            black_index = heapq.heappop(black_indices)
-            heapq.heappush(white_indices, -black_index)
-            heapq.heappush(black_indices, white_index)
-            swap_counter += white_index - black_index
+        counter = 0
 
-        return swap_counter
+        while (black_pointer < len(black_indices) and white_pointer >= 0):
+            if white_indices[white_pointer] > black_indices[black_pointer]:
+                counter += white_indices[white_pointer] - black_indices[black_pointer]
+                white_pointer -= 1
+                black_pointer += 1
+            else:
+                break
+        return counter
         
