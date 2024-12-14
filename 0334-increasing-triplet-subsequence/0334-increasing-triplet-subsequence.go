@@ -7,7 +7,7 @@ func increasingTriplet(nums []int) bool {
         third := nums[i]
         if third < currFirst {
             currFirst = third
-        } else if third > currFirst {
+        } else if third > currFirst || third > first {
             if second == -1{
                 second = third
             } else {
