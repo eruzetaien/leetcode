@@ -1,9 +1,6 @@
 # Write your MySQL query statement below
-SELECT id 
-FROM Weather as p_table
-WHERE temperature > (
-    SELECT c_table.temperature
-    FROM Weather as c_table
-    WHERE c_table.recordDate = DATE(p_table.recordDate) - INTERVAL 1 DAY
-    LIMIT 1
-);
+SELECT p_table.id
+FROM Weather AS p_table
+JOIN Weather AS c_table
+ON DATE(p_table.recordDate) = DATE(c_table.recordDate + INTERVAL 1 DAY)
+WHERE p_table.temperature > c_table.temperature;
