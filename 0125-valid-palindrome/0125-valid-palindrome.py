@@ -9,10 +9,16 @@ class Solution:
         while (left_pointer <= right_pointer):
             if (not s[left_pointer].isalnum()):
                 left_pointer += 1
+
+                if (not s[right_pointer].isalnum()):
+                    right_pointer -= 1
                 continue
 
             if (not s[right_pointer].isalnum()):
                 right_pointer -= 1
+
+                if (not s[left_pointer].isalnum()):
+                    left_pointer += 1
                 continue
 
 
