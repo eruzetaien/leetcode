@@ -6,20 +6,20 @@ class SmallestInfiniteSet:
         self.heap = []
 
     def popSmallest(self) -> int:
-        if self.heap:
-            smallest = heapq.heappop(self.heap)
-            self.added_back.remove(smallest)
-            return smallest
-        else:
-            smallest = self.current
+        if (self.heap):
+            min = heapq.heappop(self.heap)
+            self.added_back.remove(min)
+            return min
+        else :
+            min = self.current
             self.current += 1
-            return smallest
+            return min
 
     def addBack(self, num: int) -> None:
-        if num < self.current and num not in self.added_back:
+        if (num < self.current and num not in self.added_back):
             heapq.heappush(self.heap, num)
             self.added_back.add(num)
-        
+       
 
 
 # Your SmallestInfiniteSet object will be instantiated and called as such:
