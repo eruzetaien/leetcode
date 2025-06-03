@@ -2,28 +2,31 @@ class Solution:
     def totalCost(self, costs: List[int], k: int, candidates: int) -> int:
         n = len(costs)
         total_cost = 0
-        heap = []
+        left = costs[:candidates]
+        right = costs[max(candidates, n - candidates):]
 
-        i, j = 0, n - 1
+        heapq.heapify(left)
+        heapq.heapify(right)
 
-        for _ in range(candidates):
-            if i <= j:
-                heapq.heappush(heap, (costs[i], i, 'L'))
-                i += 1
-            if i <= j:
-                heapq.heappush(heap, (costs[j], j, 'R'))
-                j -= 1
+        i, j = candidates, n - candidates - 1
 
         for _ in range(k):
-            cost, index, side = heapq.heappop(heap)
-            total_cost += cost
+            if not left:
+                val = heapq.heappop(right)
+            elif not right:
+                val = heapq.heappop(left)
+            elif left[0] <= right[0]:
+                val = heapq.heappop(left)
+            else:
+                val = heapq.heappop(right)
+            total_cost += val
 
             if i <= j:
-                if side == 'L':
-                    heapq.heappush(heap, (costs[i], i, 'L'))
+                if len(left) < candidates:
+                    heapq.heappush(left, costs[i])
                     i += 1
-                else:  # side == 'R'
-                    heapq.heappush(heap, (costs[j], j, 'R'))
+                elif len(right) < candidates:
+                    heapq.heappush(right, costs[j])
                     j -= 1
 
         return total_cost
