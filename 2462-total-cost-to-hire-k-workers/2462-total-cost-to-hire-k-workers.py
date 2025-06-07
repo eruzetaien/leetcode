@@ -25,7 +25,7 @@ class Solution:
                 if len(left) < candidates:
                     heapq.heappush(left, costs[i])
                     i += 1
-                elif len(right) < candidates:
+                if len(right) < candidates:
                     heapq.heappush(right, costs[j])
                     j -= 1
 
