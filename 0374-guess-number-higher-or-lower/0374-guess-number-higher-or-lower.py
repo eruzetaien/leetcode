@@ -13,6 +13,7 @@ class Solution:
             result = guess(mid)
             if result == 0:
                 return mid
+                
             if result < 0:
                 right = mid - 1
             else:
