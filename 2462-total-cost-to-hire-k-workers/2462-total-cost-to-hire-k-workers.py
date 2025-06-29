@@ -1,36 +1,38 @@
 class Solution:
     def totalCost(self, costs: List[int], k: int, candidates: int) -> int:
         n = len(costs)
-        left_candidates = costs[:candidates]
-        right_candidates = costs[max((n-candidates), candidates):]
+        
+        left_pointer = candidates
+        right_pointer = max(candidates,(n-candidates)) - 1
+
+        left_candidates = costs[:left_pointer]
+        right_candidates = costs[right_pointer + 1:]
 
         heapq.heapify(left_candidates)
         heapq.heapify(right_candidates)
 
-        left_pointer = candidates
-        right_pointer = (n-candidates) - 1
+        total_cost = 0
 
-        total_costs = 0
-        for _ in range(k):
-            if (not left_candidates):
-                total_costs += heapq.heappop(right_candidates)
-                if (len(right_candidates) < candidates and right_pointer >= left_pointer):
-                    heapq.heappush(right_candidates, costs[right_pointer])
-                    right_pointer -= 1
-            elif (not right_candidates):
-                total_costs += heapq.heappop(left_candidates)
-                if (len(left_candidates) < candidates and left_pointer <= right_pointer):
-                    heapq.heappush(left_candidates, costs[left_pointer])
-                    left_pointer += 1
+        for i in range(k):
+            is_candidate_from_left = None
+            if (len(left_candidates) <= 0):
+                is_candidate_from_left = False
+            elif (len(right_candidates) <= 0):
+                is_candidate_from_left = True
             elif (left_candidates[0] <= right_candidates[0]):
-                total_costs += heapq.heappop(left_candidates)
-                if (len(left_candidates) < candidates and left_pointer <= right_pointer):
+                is_candidate_from_left = True
+            else:
+                is_candidate_from_left = False
+
+            if (is_candidate_from_left):
+                total_cost += heapq.heappop(left_candidates)
+                if (left_pointer <= right_pointer):
                     heapq.heappush(left_candidates, costs[left_pointer])
                     left_pointer += 1
             else :
-                total_costs += heapq.heappop(right_candidates)
-                if (len(right_candidates) < candidates and right_pointer >= left_pointer):
+                total_cost += heapq.heappop(right_candidates)
+                if (left_pointer <= right_pointer):
                     heapq.heappush(right_candidates, costs[right_pointer])
                     right_pointer -= 1
-        
-        return total_costs
+
+        return total_cost
