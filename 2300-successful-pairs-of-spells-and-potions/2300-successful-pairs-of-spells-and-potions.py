@@ -2,21 +2,15 @@ class Solution:
     def successfulPairs(self, spells: List[int], potions: List[int], success: int) -> List[int]:
         potions.sort()
         m = len(potions)
-        result = []
-
-        def binary_search(threshold):
-            left, right = 0, m - 1
-            while left <= right:
-                mid = (left + right) // 2
-                if potions[mid] < threshold:
-                    left = mid + 1
-                else:
-                    right = mid - 1
-            return left  # first index where potions[i] >= threshold
+        res = []
 
         for spell in spells:
-            threshold = (success + spell - 1) // spell  
-            index = binary_search(threshold)
-            result.append(m - index)
+            if spell == 0:
+                res.append(0)
+                continue
 
-        return result
+            min_required = math.ceil(success / spell) 
+            idx = bisect_left(potions, min_required) # binary search
+            res.append(m - idx)
+
+        return res
