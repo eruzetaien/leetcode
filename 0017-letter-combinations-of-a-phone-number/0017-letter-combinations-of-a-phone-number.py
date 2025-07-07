@@ -10,16 +10,16 @@ class Solution:
 
         result = []
 
-        def backtrack(index, current_combination):
-            if index == len(digits):
-                result.append("".join(current_combination))
+        def backtrack(digit_idx, combinations):
+            if (digit_idx == len(digits)):
+                result.append("".join(combinations))
                 return
+            
+            digit = digits[digit_idx]
+            posible_char = phone_map[digit]
+            for char in  posible_char:
+                backtrack(digit_idx + 1, combinations + [char])
 
-            possible_letters = phone_map[digits[index]]
-            for letter in possible_letters:
-                current_combination.append(letter)
-                backtrack(index + 1, current_combination)
-                current_combination.pop()
-
+        
         backtrack(0, [])
         return result
