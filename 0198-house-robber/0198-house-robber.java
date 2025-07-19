@@ -1,26 +1,17 @@
 class Solution {
     public int rob(int[] nums) {
-        Map<Integer,Integer> memo = new HashMap<Integer,Integer>();
-        return helper(nums, 0, memo);
-    }
+        if (nums.length == 0) return 0;
+        if (nums.length == 1) return nums[0];
 
-    private int helper(int[] nums, int idx, Map<Integer, Integer> memo){
-        if (idx >= nums.length){return 0;}
+        int prev1 = 0; // max rob until i-1
+        int prev2 = 0; // max rob until i-2
 
-        int rob1 = nums[idx];
-        if (memo.containsKey(idx+2)){rob1 += memo.get(idx+2);}
-        else {rob1 += helper(nums, idx+2, memo); }
-
-        if (idx+1  >= nums.length){
-            memo.put(idx, rob1);
-            return rob1;
+        for (int num : nums) {
+            int temp = prev1;
+            prev1 = Math.max(prev1, prev2 + num);
+            prev2 = temp;
         }
 
-        int rob2 = nums[idx+1];
-        if (memo.containsKey(idx+3)){rob2 += memo.get(idx+3);}
-        else {rob2 += helper(nums, idx+3, memo); }
-
-        memo.put(idx, Math.max(rob1, rob2));
-        return memo.get(idx);
+        return prev1;
     }
 }
