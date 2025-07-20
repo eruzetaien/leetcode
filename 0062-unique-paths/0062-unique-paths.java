@@ -1,14 +1,14 @@
 class Solution {
     public int uniquePaths(int m, int n) {
-        int[] dp = new int[n];
-        Arrays.fill(dp, 1);  // Only one way to reach any cell in the first row
+        // Combination to chose all dowm move or right move needed from total move
+        int N = m -1 + n - 1;
+        int k = Math.min(m - 1, n - 1); // Choose smaller to optimize
+        long result = 1;
 
-        for (int i = 1; i < m; i++) {
-            for (int j = 1; j < n; j++) {
-                dp[j] += dp[j - 1];  // Update number of ways to reach current cell
-            }
+        for (int i = 1; i <= k; i++) {
+            result = result * (N - k + i) / i;
         }
 
-        return dp[n - 1];
+        return (int) result;
     }
 }
