@@ -1,15 +1,14 @@
 class Solution {
     public int uniquePaths(int m, int n) {
-        int[][] memo= new int[m][n];
+        int[] dp = new int[n];
+        Arrays.fill(dp, 1);  // Only one way to reach any cell in the first row
 
-        memo[0][0] = 1;
-
-        for (int i = 0; i < m; i++){
-            for (int j = 0; j < n; j++){
-                if (i-1 >= 0){memo[i][j] += memo[i-1][j];}
-                if (j-1 >= 0){memo[i][j] += memo[i][j-1];}
+        for (int i = 1; i < m; i++) {
+            for (int j = 1; j < n; j++) {
+                dp[j] += dp[j - 1];  // Update number of ways to reach current cell
             }
         }
-        return memo[m-1][n-1];
+
+        return dp[n - 1];
     }
 }
