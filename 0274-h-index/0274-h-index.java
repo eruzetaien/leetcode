@@ -1,18 +1,24 @@
 class Solution {
     public int hIndex(int[] citations) {
         int n = citations.length;
-        Integer[] sortedCitations = Arrays.stream(citations).boxed().toArray(Integer[]::new);
-        Arrays.sort(sortedCitations, Collections.reverseOrder());
-
-        int i = 0;
-        while (sortedCitations[i] >= i + 1 && i < n){
-            System.out.println(i);
-            System.out.println(sortedCitations[i]);
-            System.out.println();
-            i++;
-
+        int[] count = new int[n + 1]; 
+        
+        for (int c : citations) {
+            if (c >= n) {
+                count[n]++; // Jika lebih dari n, masukkan ke count[n]
+            } else {
+                count[c]++;
+            }
         }
-
-        return i;
+        
+        int h = 0;
+        for (int i = n; i >= 0; i--) {
+            h += count[i]; // Akumulasi jumlah paper
+            if (h >= i) {
+                return i; // H-index ditemukan
+            }
+        }
+        
+        return 0;
     }
 }
