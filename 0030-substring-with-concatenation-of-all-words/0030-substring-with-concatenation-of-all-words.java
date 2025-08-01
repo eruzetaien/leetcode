@@ -17,6 +17,7 @@ class Solution {
             int left = i;
             int right = i;
             int count = 0;
+            windowCount.clear();
             
             while (right + wordLen <= s.length()){
                 String word = s.substring(right, right + wordLen);
