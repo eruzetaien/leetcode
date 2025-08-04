@@ -1,5 +1,5 @@
-# Write your MySQL query statement below
+-- Write your PostgreSQL query statement below
 SELECT product_name, year, price
-FROM Sales 
-JOIN Product 
-ON Sales.product_id = Product.product_id;
+FROM Sales AS S 
+JOIN Product AS P
+ON S.product_id = P.product_id;
