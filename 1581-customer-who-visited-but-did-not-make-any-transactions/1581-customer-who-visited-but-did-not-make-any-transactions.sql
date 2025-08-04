@@ -1,7 +1,7 @@
-# Write your MySQL query statement below
-SELECT DISTINCT customer_id, COUNT(customer_id) AS count_no_trans
-FROM Visits 
-LEFT JOIN Transactions 
-ON Visits.visit_id = Transactions.visit_id
-WHERE transaction_id IS NULL
-GROUP BY customer_id;
+-- Write your PostgreSQL query statement below
+SELECT V.customer_id, COUNT(*) AS count_no_trans
+FROM Visits AS V
+LEFT JOIN Transactions AS T
+ON V.visit_id = T.visit_id
+WHERE T.transaction_id IS NULL
+GROUP BY V.customer_id;
