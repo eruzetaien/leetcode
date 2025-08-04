@@ -2,37 +2,20 @@ class Solution {
     public boolean isIsomorphic(String s, String t) {
         if (s.length() != t.length()){return false;}
 
-        // 2 map -> K,V = Char,Freq
-        // Populate map -> O(max(M,N))
-        // 2 List -> freq
-        // Sort list  | O(Max(N Log(N),  M Log(M))
-        // Compare 2 List 
+        int[] mapST = new int[256]; // map from s to t
+        int[] mapTS = new int[256]; // map from t to s
 
+        for (int i = 0; i < s.length(); i++) {
+            char sc = s.charAt(i);
+            char tc = t.charAt(i);
 
-        Map<Character, Integer> charSFreq = new HashMap<>();
-        Map<Character, Integer> charTFreq = new HashMap<>();
-
-        for (char ch : s.toCharArray()){
-            charSFreq.put(ch, charSFreq.getOrDefault(ch, 0) + 1);
-        }
-
-        for (char ch : t.toCharArray()){
-            charTFreq.put(ch, charTFreq.getOrDefault(ch, 0) + 1);
-        }
-
-        int totalUniqueCharS = charSFreq.size();
-        int totalUniqueCharT = charTFreq.size();
-
-        if (totalUniqueCharS != totalUniqueCharT){return false;}
-
-        int[] freqS = new int[totalUniqueCharS];
-        int[] freqT = new int[totalUniqueCharT];
-
-        Arrays.sort(freqS);
-        Arrays.sort(freqT);
-
-        for (int i = 0; i < totalUniqueCharS; i++){
-            if (freqS[i] != freqT[i]){return false;}
+            // if mappings are inconsistent
+            if (mapST[sc] == 0 && mapTS[tc] == 0) {
+                mapST[sc] = tc;
+                mapTS[tc] = sc;
+            } else {
+                if (mapST[sc] != tc || mapTS[tc] != sc) return false;
+            }
         }
 
         return true;
