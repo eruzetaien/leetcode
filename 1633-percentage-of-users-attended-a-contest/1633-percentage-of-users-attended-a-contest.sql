@@ -1,10 +1,7 @@
-# Write your MySQL query statement below
+-- Write your PostgreSQL query statement below
 SELECT 
     contest_id, 
-    ROUND(COUNT( DISTINCT user_id)/(SELECT DISTINCT COUNT(*) FROM Users) * 100.0, 2) AS percentage
-FROM 
-    Register
-GROUP BY 
-    contest_id
-ORDER BY 
-    percentage DESC, contest_id ASC;
+    ROUND(COUNT(user_id) * 100.0 / (SELECT COUNT(DISTINCT user_id) FROM Users) ,2) AS percentage
+FROM register 
+GROUP BY contest_id
+ORDER BY percentage DESC, contest_id ASC
