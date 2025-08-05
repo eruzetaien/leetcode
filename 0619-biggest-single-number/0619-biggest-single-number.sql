@@ -1,10 +1,8 @@
-# Write your MySQL query statement below
-WITH SingleNumbers AS (
-    SELECT num
+-- Write your PostgreSQL query statement below
+SELECT MAX(single_num) as num
+FROM (
+    SELECT num AS single_num
     FROM MyNumbers
     GROUP BY num
-    HAVING COUNT(*) <= 1
+    HAVING COUNT(num) = 1
 )
-
-SELECT MAX(num) as num
-FROM SingleNumbers;
