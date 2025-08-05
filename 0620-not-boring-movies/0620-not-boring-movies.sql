@@ -1,9 +1,5 @@
-# Write your MySQL query statement below
-SELECT * 
+-- Write your PostgreSQL query statement below
+SELECT *
 FROM Cinema
-WHERE description NOT IN (
-    SELECT description
-    FROM Cinema
-    WHERE id % 2 = 0 OR description LIKE '%boring%' 
-)
+WHERE id % 2 = 1 AND description != 'boring'
 ORDER BY rating DESC
