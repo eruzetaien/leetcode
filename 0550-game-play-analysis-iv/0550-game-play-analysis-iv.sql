@@ -1,14 +1,11 @@
-# Write your MySQL query statement below
+-- Write your PostgreSQL query statement below
 SELECT 
-    ROUND(
-        COUNT(DISTINCT A2.player_id) / COUNT(DISTINCT A1.player_id), 2
-    ) AS fraction
-FROM 
-    (SELECT 
-         player_id, 
-         MIN(event_date) AS first_date
-     FROM Activity
-     GROUP BY player_id) AS A1
-LEFT JOIN Activity AS A2
-ON A2.event_date = DATE_ADD(A1.first_date, INTERVAL 1 DAY) 
-AND A1.player_id = A2.player_id;
+    ROUND(1.0 * COUNT(DISTINCT a1.player_id) / (SELECT COUNT(DISTINCT player_id) FROM Activity), 2) AS fraction
+FROM Activity AS a1 
+JOIN 
+    (
+        SELECT player_id, MIN(event_date) AS first_date
+        FROM Activity
+        GROUP BY player_id
+    ) AS a2
+ON a1.player_id = a2.player_id AND a1.event_date = a2.first_date + INTERVAL '1 day'
