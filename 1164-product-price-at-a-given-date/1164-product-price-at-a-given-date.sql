@@ -1,20 +1,18 @@
 -- Write your PostgreSQL query statement below
-WITH AllProducts AS (
-    SELECT DISTINCT product_id
+WITH LatestPrice AS (
+    SELECT DISTINCT ON (product_id)
+        product_id,
+        new_price
     FROM Products
+    WHERE change_date <= '2019-08-16'
+    ORDER BY product_id, change_date DESC
 ),
-ProductLastUpdate AS (
-    SELECT product_id, MAX(change_date) AS last_change_date
-    FROM Products
-    WHERE change_date <= DATE('2019-08-16')
-    GROUP BY product_id
+AllProducts AS (
+    SELECT DISTINCT product_id FROM Products
 )
 
-SELECT 
-    ap.product_id, 
-    COALESCE(p.new_price, 10) AS price
-FROM AllProducts AS ap
-LEFT JOIN ProductLastUpdate AS lu
-    ON ap.product_id = lu.product_id 
-LEFT JOIN Products AS p
-    ON ap.product_id = p.product_id AND p.change_date = lu.last_change_date 
+SELECT
+    ap.product_id,
+    COALESCE(lp.new_price, 10) AS price
+FROM AllProducts ap
+LEFT JOIN LatestPrice lp ON ap.product_id = lp.product_id;
