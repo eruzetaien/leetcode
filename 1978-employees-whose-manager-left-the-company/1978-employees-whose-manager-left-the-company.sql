@@ -1,9 +1,12 @@
-# Write your MySQL query statement below
-SELECT DISTINCT employee_id
+-- Write your PostgreSQL query statement below
+
+
+SELECT employee_id 
 FROM Employees
-WHERE salary < 30000 AND
+WHERE salary < 30000 AND 
     manager_id NOT IN (
-        SELECT DISTINCT employee_id
+        SELECT DISTINCT employee_id 
         FROM Employees
     )
-ORDER BY employee_id;
+ORDER BY employee_id
+;
