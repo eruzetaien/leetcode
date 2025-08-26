@@ -14,19 +14,19 @@ class Solution {
         ListNode leadPointer = dummyHead;
         ListNode trailPointer = dummyHead;
 
-        for (int i = 0; i<n; i++){
+        for (int i = 0; i < n; i++){
             leadPointer = leadPointer.next;
-            if (leadPointer == null){
+            if (leadPointer == null)
                 return head;
-            }
         }
 
         while (leadPointer.next != null){
             leadPointer = leadPointer.next;
-            trailPointer = trailPointer.next;
+            trailPointer = trailPointer.next;  
         }
 
         trailPointer.next = trailPointer.next.next;
+
         return dummyHead.next;
     }
 }
