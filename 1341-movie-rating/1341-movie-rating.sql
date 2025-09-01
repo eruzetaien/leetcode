@@ -1,29 +1,25 @@
-# Write your MySQL query statement below
-WITH UserResult AS (
-    SELECT 
-        U.name AS results 
-    FROM MovieRating AS MR
-    JOIN Users AS U
-        ON MR.user_id = U.user_id
-    GROUP BY MR.user_id
-    ORDER BY COUNT(MR.user_id) DESC, U.name ASC
+-- Write your PostgreSQL query statement below
+-- Solution
+SELECT name AS results
+FROM (
+    SELECT u.name
+    FROM Users u
+    JOIN MovieRating mr ON u.user_id = mr.user_id
+    GROUP BY u.user_id, u.name
+    ORDER BY COUNT(mr.movie_id) DESC, u.name ASC
     LIMIT 1
-), MovieResult AS (
-    SELECT 
-        M.title AS results
-    FROM MovieRating AS MR
-    JOIN Movies AS M
-        ON MR.movie_id = M.movie_id
-    WHERE MR.created_at BETWEEN '2020-02-01' AND '2020-02-29'
-    GROUP BY MR.movie_id
-    ORDER BY AVG(MR.rating)  DESC, M.title ASC
-    LIMIT 1
-)
-SELECT results
-FROM UserResult
+) AS top_user
+
 UNION ALL
-SELECT results
-FROM MovieResult;
 
-
-
+SELECT title AS results
+FROM (
+    SELECT m.title
+    FROM Movies m
+    JOIN MovieRating mr ON m.movie_id = mr.movie_id
+    WHERE mr.created_at >= '2020-02-01' 
+      AND mr.created_at <  '2020-03-01'
+    GROUP BY m.movie_id, m.title
+    ORDER BY AVG(mr.rating) DESC, m.title ASC
+    LIMIT 1
+) AS top_movie;
