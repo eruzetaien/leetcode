@@ -22,7 +22,9 @@ class LRUCache {
     }
     
     public int get(int key) {
-        if (!map.containsKey(key)) return -1;
+        if (!map.containsKey(key))
+            return -1;
+        
         Node node = map.get(key);
         remove(node);
         insertToHead(node);
@@ -30,20 +32,23 @@ class LRUCache {
     }
     
     public void put(int key, int value) {
-        if (map.containsKey(key)) {
+        if (map.containsKey(key)){
             Node node = map.get(key);
-            node.value = value;
             remove(node);
             insertToHead(node);
+            node.value = value;
         } else {
-            if (map.size() == capacity) {
-                Node lru = tail.prev;
-                remove(lru);
-                map.remove(lru.key);
-            }
             Node newNode = new Node(key, value);
-            map.put(key, newNode);
-            insertToHead(newNode);
+            newNode.prev = head;
+            newNode.next = head.next;
+            head.next.prev = newNode;
+            head.next = newNode;
+            map.put(key,newNode);
+            if (map.size() > capacity){
+                Node removedNode = tail.prev;
+                map.remove(removedNode.key);
+                remove(removedNode);
+            }
         }
     }
 
