@@ -18,28 +18,32 @@ class Solution {
     private Map<Integer, Integer> inorderMap;
 
     public TreeNode buildTree(int[] inorder, int[] postorder) {
-        postIndex = postorder.length - 1;
+        int n = inorder.length;
         inorderMap = new HashMap<>();
-        for (int i = 0; i < inorder.length; i++) {
+        for (int i = 0; i < n; i++){
             inorderMap.put(inorder[i], i);
         }
-        return build(postorder, 0, inorder.length - 1);
+
+        postIndex = n -1;
+        return build(postorder, 0, n-1);
     }
 
-    private TreeNode build( int[] postorder, int inStart, int inEnd) {
-        if (inStart > inEnd) {
+    private TreeNode build(int[] postorder, int left, int right){
+        if (left > right)
             return null;
-        }
 
-        int rootVal = postorder[postIndex--];
-        TreeNode root = new TreeNode(rootVal);
+        int rootVal = postorder[postIndex];
+        postIndex--;
 
-        int inIndex = inorderMap.get(rootVal);
+        TreeNode root = new TreeNode(rootVal); 
 
-        // left <- right <- root 
-        root.right = build(postorder, inIndex + 1, inEnd);
-        root.left = build(postorder, inStart, inIndex - 1);
+        int inorderIndex = inorderMap.get(rootVal);
 
+        root.right = build(postorder, inorderIndex + 1, right);
+        root.left = build(postorder, left, inorderIndex - 1);
+        
         return root;
     }
+
+    
 }
