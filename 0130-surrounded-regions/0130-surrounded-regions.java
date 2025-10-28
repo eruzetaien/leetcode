@@ -1,41 +1,53 @@
 class Solution {
+    char[][] board;
+    int totalRow;
+    int totalCol;
+    
     public void solve(char[][] board) {
-     if (board == null || board.length == 0) return;
+        if (board == null || board.length == 0) return;
+        
+        this.board = board;
+        this.totalRow = board.length;
+        this.totalCol = board[0].length;
 
-        int m = board.length;
-        int n = board[0].length;
-
-        // Mark Safe (S) Area
-        for (int i = 0; i < m; i++) {
-            dfs(board, i, 0, m, n);        // left border
-            dfs(board, i, n - 1, m, n);    // right border
+        for (int i = 0; i < totalRow; i++){
+            bfs(i, 0); // first row
+            bfs(i, totalCol -1); // last row
         }
 
-        for (int j = 0; j < n; j++) {
-            dfs(board, 0, j, m, n);        // top border
-            dfs(board, m - 1, j, m, n);    // bottom border
+        for (int j = 0; j < totalCol; j++){
+            bfs(0, j);
+            bfs(totalRow -1, j);
         }
 
-        // Flip all remaining 'O' to 'X', and 'S' back to 'O'
-        for (int i = 0; i < m; i++) {
-            for (int j = 0; j < n; j++) {
-                if (board[i][j] == 'O') {
-                    board[i][j] = 'X';  // captured region
-                } else if (board[i][j] == 'S') {
-                    board[i][j] = 'O';  // safe region
+        for (int i = 0; i < totalRow; i++){
+            for (int j = 0; j < totalCol; j++){
+                switch (this.board[i][j]){
+                    case 'S':
+                        this.board[i][j] = 'O';
+                        break;
+                    case 'O':
+                        this.board[i][j] = 'X';
+                        break;
                 }
             }
         }
     }
 
-    private void dfs(char[][] board, int i, int j, int m, int n) {
-        if (i < 0 || i >= m || j < 0 || j >= n || board[i][j] != 'O') return;
+    private void bfs( int i, int j){
+        if (i < 0 || j < 0 || i >= this.totalRow || j >= this.totalCol )
+            return;
+        
+        if (this.board[i][j] != 'O')
+            return;
+        
+        this.board[i][j] = 'S';
 
-        board[i][j] = 'S'; 
-
-        dfs(board, i + 1, j, m, n);
-        dfs(board, i - 1, j, m, n);
-        dfs(board, i, j + 1, m, n);
-        dfs(board, i, j - 1, m, n);
+        bfs(i + 1, j);
+        bfs(i - 1, j);
+        bfs(i, j + 1);
+        bfs(i, j - 1);
     }
+
+
 }
