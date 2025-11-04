@@ -1,43 +1,39 @@
 class Solution {
     public boolean canFinish(int numCourses, int[][] prerequisites) {
-        // Step 1: Build adjacency list
-        List<List<Integer>> graph = new ArrayList<>();
+        List<List<Integer>> graph = new ArrayList<>(numCourses);
+        int[] inDegreeCount = new int[numCourses];
         for (int i = 0; i < numCourses; i++) {
             graph.add(new ArrayList<>());
         }
+    
+        for (int[] prerequisite : prerequisites){
+            int preCourse = prerequisite[1];
+            int course = prerequisite[0];
 
-        // Step 2: Build in-degree array
-        int[] inDegree = new int[numCourses];
-        for (int[] pre : prerequisites) {
-            int course = pre[0];
-            int prereq = pre[1];
-            graph.get(prereq).add(course);
-            inDegree[course]++;
+            graph.get(preCourse).add(course);
+            inDegreeCount[course] += 1;
+        }
+        
+        Queue<Integer> availableCourse = new LinkedList<>();
+        for (int i = 0; i < numCourses ; i++ ){
+            if (inDegreeCount[i] == 0)
+                availableCourse.offer(i);
         }
 
-        // Step 3: Add all courses with in-degree 0 to queue
-        Queue<Integer> queue = new LinkedList<>();
-        for (int i = 0; i < numCourses; i++) {
-            if (inDegree[i] == 0) {
-                queue.offer(i);
-            }
-        }
-
-        // Step 4: Process nodes in topological order
         int completed = 0;
-        while (!queue.isEmpty()) {
-            int course = queue.poll();
+        while (!availableCourse.isEmpty()){
+            int course = availableCourse.poll();
             completed++;
 
-            for (int next : graph.get(course)) {
-                inDegree[next]--;
-                if (inDegree[next] == 0) {
-                    queue.offer(next);
-                }
+            for (int nextCourse : graph.get(course) ){
+                if (--inDegreeCount[nextCourse] == 0)
+                    availableCourse.offer(nextCourse);
             }
         }
 
-        // Step 5: Check if we completed all courses
-        return completed == numCourses;
+        System.out.println(Arrays.toString(inDegreeCount));
+        System.out.println(graph);
+
+        return numCourses == completed;
     }
 }
