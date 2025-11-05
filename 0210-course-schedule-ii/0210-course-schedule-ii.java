@@ -28,7 +28,6 @@ class Solution {
         while (!courseQueue.isEmpty()) {
             int course = courseQueue.poll();
             order[index++] = course;
-            
 
             for (int nextCourse : graph.get(course)) {
                 if (--inDegreeCount[nextCourse] == 0) {
