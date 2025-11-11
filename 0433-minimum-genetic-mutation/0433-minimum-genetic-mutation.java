@@ -1,41 +1,36 @@
 class Solution {
     public int minMutation(String startGene, String endGene, String[] bank) {
         Set<String> bankSet = new HashSet<>(Arrays.asList(bank));
-        if (!bankSet.contains(endGene)) 
-            return -1; 
+        if (!bankSet.contains(endGene))
+            return -1;
 
-        char[] choices = new char[]{'A', 'C', 'G', 'T'};
+        char[] geneChoices = new char[] {'A', 'C', 'G', 'T'};
+
         Queue<String> queue = new LinkedList<>();
         queue.offer(startGene);
-        
-        int mutations = 0;
 
-        while (!queue.isEmpty()) {
+        int mutationCount = 0;
+        while (!queue.isEmpty()){
             int size = queue.size();
-            
-            for (int i = 0; i < size; i++) {
+            mutationCount++;
+            for (int i = 0; i < size; i++){
                 String gene = queue.poll();
-                if (gene.equals(endGene)) 
-                    return mutations;
-                
-                char[] arr = gene.toCharArray();
-                for (int pos = 0; pos < arr.length; pos++) {
-                    char old = arr[pos];
-                    for (char c : choices) {
-                        if (c == old) continue;
-                        arr[pos] = c;
-                        String mutated = new String(arr);
-                        if (bankSet.contains(mutated)) {
-                            queue.offer(mutated);
-                            bankSet.remove(mutated);
-                        }
+                for (int c = 0; c < gene.length(); c++){
+                    char oldChar = gene.charAt(c);
+                    for (char ch : geneChoices){
+                        gene = gene.substring(0, c) + ch + gene.substring(c + 1);
+                        if (gene.equals(endGene))
+                            return mutationCount;
+
+                        if (bankSet.contains(gene)){
+                            bankSet.remove(gene);
+                            queue.offer(gene);
+                        } 
                     }
-                    arr[pos] = old;
+                    gene = gene.substring(0, c) + oldChar + gene.substring(c + 1);;
                 }
             }
-            mutations++;
         }
-
         return -1;
 
     }
