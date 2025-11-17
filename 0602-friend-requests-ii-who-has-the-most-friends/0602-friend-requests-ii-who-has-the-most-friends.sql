@@ -1,22 +1,33 @@
-# Write your MySQL query statement below
-WITH Friendship AS (
-    SELECT requester_id AS id, accepter_id AS friend
-    FROM RequestAccepted
-    UNION ALL
-    SELECT accepter_id AS id, requester_id AS friend
-    FROM RequestAccepted
-),
-FriendCount AS (
+/* Write your T-SQL query statement below */
+
+WITH FriendReqCount AS (
     SELECT 
-        id,
-        COUNT(DISTINCT friend) AS num
-    FROM Friendship
-    GROUP BY id
+        requester_id AS [user],
+        COUNT(*) AS friendCount
+    FROM RequestAccepted
+    GROUP BY requester_id
+), 
+FriendAccCount AS (
+    SELECT 
+        accepter_id AS [user],
+        COUNT(*) AS friendCount
+    FROM RequestAccepted
+    GROUP BY accepter_id
 ),
-MaxFriends AS (
-    SELECT MAX(num) AS max_friends
-    FROM FriendCount
+Combined AS (
+    SELECT 
+        COALESCE(FRC.[user], FAC.[user]) AS user_id,
+        ISNULL(FRC.friendCount, 0) AS req_count,
+        ISNULL(FAC.friendCount, 0) AS acc_count
+    FROM FriendReqCount FRC
+    FULL OUTER JOIN FriendAccCount FAC
+        ON FRC.[user] = FAC.[user]
+), Final AS (
+    SELECT 
+        user_id,
+        req_count + acc_count AS total_friends
+    FROM Combined
 )
-SELECT id, num
-FROM FriendCount
-WHERE num = (SELECT max_friends FROM MaxFriends);
+SELECT user_id [id], total_friends [num]
+FROM Final
+WHERE total_friends = (SELECT MAX(total_friends) FROM Final);
