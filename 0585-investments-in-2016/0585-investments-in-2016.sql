@@ -1,5 +1,5 @@
 /* Write your T-SQL query statement below */
-SELECT SUM(tiv_2016) AS tiv_2016 
+SELECT ROUND(SUM(tiv_2016),2) AS tiv_2016 
 FROM Insurance AS I
 WHERE NOT EXISTS (
         SELECT 1
