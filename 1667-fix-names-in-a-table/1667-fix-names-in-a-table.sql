@@ -1,9 +1,8 @@
-# Write your MySQL query statement below
+/* Write your T-SQL query statement below */
 SELECT
     user_id,
-    CONCAT(
-        UPPER(SUBSTRING(name, 1, 1)),
-        LOWER(SUBSTRING(name, 2))
-    ) AS name
+    UPPER(LEFT(name, 1)) +
+    LOWER(SUBSTRING(name, 2, LEN(name))) AS name
 FROM Users
-ORDER BY user_id
+ORDER BY user_id;
+
