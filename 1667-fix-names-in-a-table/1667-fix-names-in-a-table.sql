@@ -1,8 +1,6 @@
 /* Write your T-SQL query statement below */
-SELECT
+SELECT 
     user_id,
-    UPPER(LEFT(name, 1)) +
-    LOWER(SUBSTRING(name, 2, LEN(name))) AS name
+    CONCAT(UPPER(SUBSTRING(name, 1, 1)), LOWER(SUBSTRING(name, 2, LEN(name)-1))) AS name
 FROM Users
-ORDER BY user_id;
-
+ORDER BY user_id
