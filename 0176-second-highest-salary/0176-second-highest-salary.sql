@@ -1,7 +1,17 @@
-# Write your MySQL query statement below
+/* Write your T-SQL query statement below */
 SELECT 
-    MAX(salary) AS SecondHighestSalary
-FROM 
-    Employee
-WHERE 
-    salary < (SELECT MAX(salary) FROM Employee);
+    CASE 
+        WHEN (
+            SELECT COUNT(DISTINCT salary)
+            FROM Employee
+        ) >= 2 THEN (
+            SELECT TOP 1 Salary
+            FROM Employee
+            WHERE Salary NOT IN (
+                SELECT Max(Salary)
+                FROM Employee
+            )
+            ORDER BY Salary DESC
+        )
+        ELSE NULL
+    END AS SecondHighestSalary
