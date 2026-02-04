@@ -1,21 +1,27 @@
 class Solution {
     public boolean repeatedSubstringPattern(String s) {
         int n = s.length();
+        int[] lps = new int[n]; // longest prefix-suffix (KMP)
 
-        for (int subLen = 1; subLen <= n / 2; subLen++) {
-            if (n % subLen != 0) continue;
+        int j = 0;
+        int i = 1;
 
-            String pattern = s.substring(0, subLen);
-            int i = subLen;
-
-            while (i < n && s.startsWith(pattern, i)) {
-                i += subLen;
+        while (i < n){
+            if (s.charAt(i) == s.charAt(j)){
+                j++;
+                lps[i] = j;
+                i++;
+            } else {
+                if (j != 0){
+                    j = lps[j-1]; 
+                } else {
+                    lps[i] = 0;
+                    i++;
+                }
             }
-
-            if (i == n) return true;
         }
 
-        return false;
-
+        int substringLen = lps[n-1];
+        return substringLen > 0 && n % (n-substringLen) == 0;
     }
 }
