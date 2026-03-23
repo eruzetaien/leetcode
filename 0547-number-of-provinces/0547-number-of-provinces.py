@@ -1,7 +1,7 @@
 class Solution:
     def findCircleNum(self, isConnected: List[List[int]]) -> int:
-        n = len(isConnected)
-        visited = [False] * n
+        n: int = len(isConnected)
+        visited: List[bool] = [False] * n
 
         def dfs(city):
             for neighbor in range(n):
@@ -9,7 +9,7 @@ class Solution:
                     visited[neighbor] = True
                     dfs(neighbor)
 
-        provinces = 0
+        provinces: int = 0
         for i in range(n):
             if not visited[i]:
                 dfs(i)
