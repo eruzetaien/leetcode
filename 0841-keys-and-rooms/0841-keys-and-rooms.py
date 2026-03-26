@@ -1,19 +1,17 @@
 class Solution:
     def canVisitAllRooms(self, rooms: List[List[int]]) -> bool:
-        visited = set()
+        n: int = len(rooms)
+        
+        visited: set[int] = {0}
+        stack: List[int] = rooms[0]
 
-        available_rooms = [0]
-        pointer = 0
-        while (pointer < len(available_rooms)):
-            room_number = available_rooms[pointer]
-            visited.add(room_number)
+        while stack:
+            room: int = stack.pop()
+            if (room not in visited):
+                visited.add(room)
 
-            room = rooms[room_number]
-            for number in room:
-                if (number not in visited ):
-                    available_rooms.append(number)
+            for room_key in rooms[room]:
+                if (room_key not in visited):
+                    stack.append(room_key)
 
-                
-            pointer += 1
-
-        return len(visited) == len(rooms)
+        return len(visited) == n
