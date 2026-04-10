@@ -16,7 +16,6 @@ class Solution {
             int x = cell[0];
             int y = cell[1];
 
-            System.out.printf("%d, %d\n", x,y);
             if (x == n-1 && y == n-1){
                 return grid[x][y];
             }
