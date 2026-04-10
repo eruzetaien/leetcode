@@ -9,28 +9,28 @@
  */
 class Solution {
     public List<Integer> distanceK(TreeNode root, TreeNode target, int k) {
-        Map<TreeNode, List<TreeNode>> graph = new HashMap<>();
+        Map<Integer, List<Integer>> graph = new HashMap<>();
         buildGraph(root, null, graph);
 
         List<Integer> result = new ArrayList<>();
-        Queue<TreeNode> queue = new LinkedList<>();
-        Set<TreeNode> visited = new HashSet<>();
+        Queue<Integer> queue = new LinkedList<>();
+        Set<Integer> visited = new HashSet<>();
 
-        queue.offer(target);
-        visited.add(target);
+        queue.offer(target.val);
+        visited.add(target.val);
         int dist = 0;
 
         while (!queue.isEmpty()) {
             int size = queue.size();
             if (dist == k) {
-                for (TreeNode node : queue) {
-                    result.add(node.val);
+                for (Integer node : queue) {
+                    result.add(node);
                 }
                 break;
             }
             for (int i = 0; i < size; i++) {
-                TreeNode node = queue.poll();
-                for (TreeNode neighbor : graph.getOrDefault(node, new ArrayList<>())) {
+                int node = queue.poll();
+                for (int neighbor : graph.getOrDefault(node, new ArrayList<>())) {
                     if (!visited.contains(neighbor)) {
                         visited.add(neighbor);
                         queue.offer(neighbor);
@@ -43,13 +43,13 @@ class Solution {
         return result;
     }
 
-    private void buildGraph(TreeNode node, TreeNode parent, Map<TreeNode, List<TreeNode>> graph) {
+    private void buildGraph(TreeNode node, TreeNode parent, Map<Integer, List<Integer>> graph) {
         if (node == null) return;
 
-        graph.putIfAbsent(node, new ArrayList<>());
+        graph.putIfAbsent(node.val, new ArrayList<>());
         if (parent != null) {
-            graph.get(node).add(parent);
-            graph.get(parent).add(node);
+            graph.get(node.val).add(parent.val);
+            graph.get(parent.val).add(node.val);
         }
 
         buildGraph(node.left, node, graph);
