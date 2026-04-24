@@ -1,29 +1,27 @@
 class Solution {
     public int findJudge(int n, int[][] trust) {
-        HashMap<Integer, Integer> trustCount = new HashMap<>();
-
-        for (int i = 1; i <= n; i++) {
-            trustCount.put(i, 0);
-        }
+        // We use n + 1 to accommodate 1-based indexing for people
+        int[] netTrustScore = new int[n + 1];
 
         for (int[] t : trust) {
-            int a = t[0]; // person who trusts
-            int b = t[1]; // person who is trusted
+            int a = t[0]; // truster
+            int b = t[1]; // trustee
 
-            // a trusts someone -> decrement a's count
-            trustCount.put(a, trustCount.get(a) - 1);
+            // Person 'a' trusts someone: their potential to be judge decreases
+            netTrustScore[a]--;
 
-            // b is trusted by someone -> increment b's count
-            trustCount.put(b, trustCount.get(b) + 1);
+            // Person 'b' is trusted: their potential to be judge increases
+            netTrustScore[b]++;
         }
 
-        for (int person : trustCount.keySet()) {
-            if (trustCount.get(person) == n - 1) {
-                return person;
+        for (int i = 1; i <= n; i++) {
+            // The judge must be trusted by (n-1) people and trust 0 people
+            // (n-1) - 0 = n-1
+            if (netTrustScore[i] == n - 1) {
+                return i;
             }
         }
 
         return -1;
     }
-
 }
